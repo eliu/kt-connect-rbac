@@ -9,20 +9,6 @@ fata() { echo "$(tput setaf 1)[FATA]$(tput sgr0)" "$@"; exit 1
 command_exists() { command -v "$@" > /dev/null 2>&1
 }
 
-# --- check arguments and cli tools ---
-prerequisite() {
-  local machine=$(uname -s)
-  [[ $machine == "Linux" ]] || fata "$machine not supported."
-
-  command_exists kubectl || fata "'kubectl' was not installed on your server."
-
-  # 检查集群证书位置是否合法
-  if [[ ! -f $KUBE_CERT ]] || [[ ! -f $KUBE_CERT_KEY ]]; then
-    fata "Cluster cert not found."
-    info "Use \$KUBE_CERT and \$KUBE_CERT_KEY to specify cluster cert path."
-  fi
-}
-
 # --- Initialize config ---
 init_config() {
   export KUBE_CLUSTER_NAME="${KUBE_CLUSTER_NAME:-kubernetes}"
@@ -33,6 +19,22 @@ init_config() {
   export KT_NAMESPACE="${NAMESPACE:-default}"
   export KT_AUTH_USER="${AUTH_USER:-kt-connect}"
   export KT_LOG_FILE="kt-rbac.log"
+}
+
+# --- check arguments and cli tools ---
+prerequisite() {
+  local machine=$(uname -s)
+  [[ $machine == "Linux" ]] || fata "$machine not supported."
+
+  command_exists kubectl || fata "'kubectl' was not installed on your server."
+
+  init_config
+
+  # 检查集群证书位置是否合法
+  if [[ ! -f $KUBE_CERT ]] || [[ ! -f $KUBE_CERT_KEY ]]; then
+    fata "Cluster cert not found."
+    info "Use \$KUBE_CERT and \$KUBE_CERT_KEY to specify cluster cert path."
+  fi
 }
 
 # --- Grant user full access to the specified namespace ONLY. ---
@@ -112,7 +114,6 @@ create_kubeconfig() {
 
 {
   prerequisite
-  init_config
   create_rbac
   create_user_cert
   create_kubeconfig
