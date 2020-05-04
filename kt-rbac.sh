@@ -16,8 +16,8 @@ init_config() {
   export KUBE_API_SERVER="https://$(hostname -i | cut -d' ' -f1):${KUBE_API_SERVER_PORT}"
   export KUBE_CERT="${KUBE_CERT:-/etc/kubernetes/pki/ca.crt}"
   export KUBE_CERT_KEY="${KUBE_CERT_KEY:-/etc/kubernetes/pki/ca.key}"
-  export KT_NAMESPACE="${NAMESPACE:-default}"
-  export KT_AUTH_USER="${AUTH_USER:-kt-connect}"
+  export KT_NAMESPACE="${KT_NAMESPACE:-default}"
+  export KT_AUTH_USER="${KT_AUTH_USER:-kt-connect}"
   export KT_LOG_FILE="kt-rbac.log"
 }
 
