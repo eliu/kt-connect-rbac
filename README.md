@@ -18,24 +18,18 @@ This project aims to create a restricted `Role` binding to user `kt-connect` for
 Make sure you clone this repo to your Linux server, not your local machine and follow the instructions below:
 
 ```shell
-$ cd kt-connect-rbac
-$ ./apply-rbac.sh kt-connect -n default
+$ ./kt-rbac.sh
 [INFO] Applying RBAC for user 'kt-connect' at namespace 'default' ...
-role.rbac.authorization.k8s.io/kt-connect created
-rolebinding.rbac.authorization.k8s.io/kt-connect created
-clusterrole.rbac.authorization.k8s.io/kt-connect-cluster created
-clusterrolebinding.rbac.authorization.k8s.io/kt-connect-cluster created
-$ ./gen-kubeconfig.sh
-[INFO] Generate certificate for user kt-connect ...
+role.rbac.authorization.k8s.io/kt-connect unchanged
+rolebinding.rbac.authorization.k8s.io/kt-connect unchanged
+clusterrole.rbac.authorization.k8s.io/kt-connect-cluster unchanged
+clusterrolebinding.rbac.authorization.k8s.io/kt-connect-cluster unchanged
+[INFO] Cert for user kt-connect already been generated before.
 [INFO] Generate kubeconfig for user kt-connect to access namespace default ...
 [INFO] kubeconfig file has been saved at 'certs/default/kt-connect.kubeconfig'
-$ ls -l certs/default/
-total 24
--rw-r--r-- 1 root root  997 Mar 20 14:34 kt-connect.crt
--rw-r--r-- 1 root root  911 Mar 20 14:34 kt-connect.csr
--rw-r--r-- 1 root root 1675 Mar 20 14:34 kt-connect.key
+
+ls -l certs/default/
 -rw------- 1 root root 5348 Mar 20 14:34 kt-connect.kubeconfig
--rw-r--r-- 1 root root  413 Mar 20 14:34 kt-connect.log
 ```
 
 Copy `kt-connect.kubeconfig` to some location on your local machine or just overwrite `$HOME/.kube/config` with the new one. Then use `kubectl` and `ktctl` to test the connectivity:
@@ -73,6 +67,22 @@ kt-connect demo from tomcat9
 > **Tips:**  The example above assumes that you have already deployed a tomcat service under namespace 'default' in your cluster. You can follow the official guide of KT Connect to do this:
 >
 > https://github.com/alibaba/kt-connect/blob/master/README.md#deploy-a-service-in-kubernetes
+
+
+
+## Environment Variables
+
+You can customize your kubeconfig by setting a few environment variables before running `kt-rbac.sh`
+
+| Env Variable         | Meaning                      | Default Value              |
+| -------------------- | ---------------------------- | -------------------------- |
+| KUBE_CLUSTER_NAME    | Cluster name                 | kubernetes                 |
+| KUBE_API_SERVER_PORT | API Server port              | 8443                       |
+| KUBE_API_SERVER      | API Server URL               | https://yourhostname:8443  |
+| KUBE_CERT            | K8S cert file                | /etc/kubernetes/pki/ca.crt |
+| KUBE_CERT_KEY        | K8S cert key file            | /etc/kubernetes/pki/ca.key |
+| KT_NAMESPACE         | Namespace to access          | default                    |
+| KT_AUTH_USER         | User to access the namespace | kt-connect                 |
 
 
 
