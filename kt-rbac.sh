@@ -12,7 +12,7 @@ command_exists() { command -v "$@" > /dev/null 2>&1
 # --- Initialize config ---
 init_config() {
   export KUBE_CLUSTER_NAME="${KUBE_CLUSTER_NAME:-kubernetes}"
-  export KUBE_API_SERVER_PORT="${KUBE_API_SERVER_PORT:-8443}"
+  export KUBE_API_SERVER_PORT="${KUBE_API_SERVER_PORT:-6443}"
   export KUBE_API_SERVER="https://$(hostname -i | cut -d' ' -f1):${KUBE_API_SERVER_PORT}"
   export KUBE_CERT="${KUBE_CERT:-/etc/kubernetes/pki/ca.crt}"
   export KUBE_CERT_KEY="${KUBE_CERT_KEY:-/etc/kubernetes/pki/ca.key}"
