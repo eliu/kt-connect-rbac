@@ -2,16 +2,12 @@
 
 ------
 
-This project aims to create a restricted `Role` binding to user `kt-connect` for [KT Connect](https://github.com/alibaba/kt-connect) to use. This restricted `Role` will only have full access to the specified `Namespace` which defaults to `default`
-
-
+This project aims to create a restricted `Role` binding to user `kt-connect` for [KT Connect](https://github.com/alibaba/kt-connect) to use. This restricted `Role` will only have full access to the specified `Namespace` which defaults to `default`.
 
 ## Features
 
 - Auto create a self-certificated user `kt-connect` 
 - Auto generate `kubeconfig` file with restricted privileges for `KT Connect` and `kubectl` to use
-
-
 
 ## Quick Start
 
@@ -31,6 +27,12 @@ clusterrolebinding.rbac.authorization.k8s.io/kt-connect-cluster unchanged
 ls -l certs/default/
 -rw------- 1 root root 5348 Mar 20 14:34 kt-connect.kubeconfig
 ```
+
+> **Hint**: Pass `KT_NAMESPACE` environment variable before executing script `kt-rbac.sh` if you want to apply to another namespace instead of `default`. You can achieve this by executing the command below:
+> 
+> ```shell
+> $ env KT_NAMESPACE=mynamespace ./kt-rbac.sh
+> ```
 
 Copy `kt-connect.kubeconfig` to some location on your local machine or just overwrite `$HOME/.kube/config` with the new one. Then use `kubectl` and `ktctl` to test the connectivity:
 
